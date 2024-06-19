@@ -18,12 +18,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-namespace AnnotationSwitch {
-    [GtkTemplate (ui = "/io/github/diegoivan/annotation_switch/ui/window.ui")]
-    public class Window : Adw.ApplicationWindow {
+[GtkTemplate (ui = "/io/github/diegoivan/annotation_switch/ui/window.ui")]
+public class AnnotationSwitch.Window : Adw.ApplicationWindow {
+    [GtkChild]
+    private Adw.ComboRow source_format_row;
+    [GtkChild]
+    private Adw.ComboRow target_format_row;
 
-        public Window (Gtk.Application app) {
-            Object (application: app);
-        }
+    public Window (Gtk.Application app) {
+        Object (application: app);
+    }
+
+    construct {
+        var list_store = new ListStore (typeof (Format));
+        list_store.splice(0, 0, {
+            new Format ("Yolo V5 Oriented Bounding Boxes", FOLDER, NAME),
+        });
     }
 }

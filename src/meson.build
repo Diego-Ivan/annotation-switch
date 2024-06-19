@@ -3,8 +3,17 @@ annotation_switch_sources = [
   'application.vala',
   'window.vala',
 
+  'ErrorDomains.vala',
+
   # Models
   'Models/Format.vala',
+  'Models/Annotation.vala',
+
+  # Parser
+  'Parser/FormatParser.vala',
+
+  # Serializer
+  'Serializer/FormatSerializer.vala',
 ]
 
 annotation_switch_deps = [

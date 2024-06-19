@@ -19,4 +19,12 @@ public class AnnotationSwitch.Format : Object {
     public SourceType source_type { get; construct; default = FILE; }
     public string name { get; construct; default = ""; }
     public ClassFormat class_format { get; construct; default = NAME; }
+
+    public Format (string name, SourceType source_type, ClassFormat class_format) {
+        Object (
+            name: name, 
+            source_type: source_type, 
+            class_format: class_format
+        );
+    }
 }
