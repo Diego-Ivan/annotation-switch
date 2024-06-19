@@ -6,5 +6,7 @@
  */
 
 public interface AnnotationSwitch.FormatSerializer {
-    public abstract void init (File destination) throws AnnotationSwitch.Error;
+    public abstract void init (File destination) throws GLib.Error;
+    public abstract void push (Annotation annotation) throws GLib.Error;
+    public abstract void finish () throws GLib.Error;
 }

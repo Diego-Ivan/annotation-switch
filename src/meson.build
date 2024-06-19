@@ -11,9 +11,11 @@ annotation_switch_sources = [
 
   # Parser
   'Parser/FormatParser.vala',
+  'Parser/Yolo5OBBParser.vala',
 
   # Serializer
   'Serializer/FormatSerializer.vala',
+  'Serializer/Yolo5OBBSerializer.vala',
 ]
 
 annotation_switch_deps = [

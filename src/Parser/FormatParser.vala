@@ -6,5 +6,7 @@
  */
 
 public interface AnnotationSwitch.FormatParser {
-    public abstract void init (File source) throws AnnotationSwitch.Error;
+    public abstract void init (File source) throws GLib.Error;
+    public abstract Annotation? get_next ();
+    public abstract bool has_next ();
 }

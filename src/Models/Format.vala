@@ -20,6 +20,9 @@ public class AnnotationSwitch.Format : Object {
     public string name { get; construct; default = ""; }
     public ClassFormat class_format { get; construct; default = NAME; }
 
+    public FormatParser? parser { get; set; default = null; }
+    public FormatSerializer? serializer { get; set; default = null; }
+
     public Format (string name, SourceType source_type, ClassFormat class_format) {
         Object (
             name: name, 

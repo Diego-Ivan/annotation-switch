@@ -7,4 +7,5 @@
 
 public errordomain AnnotationSwitch.Error {
     WRONG_DESTINATION,
+    WRONG_SOURCE
 }
