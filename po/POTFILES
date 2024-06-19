@@ -1,0 +1,6 @@
+data/io.github.diegoivan.annotation_switch.desktop.in
+data/io.github.diegoivan.annotation_switch.metainfo.xml.in
+data/io.github.diegoivan.annotation_switch.gschema.xml
+src/main.vala
+src/window.vala
+src/window.ui

@@ -1,0 +1,32 @@
+using Gtk 4.0;
+using Adw 1;
+
+menu primary_menu {
+  section {
+    item {
+      label: _("_Preferences");
+      action: "app.preferences";
+    }
+
+    item (_("Keyaboard Shortcuts"), "win.show-help-overlay")
+    item (_("_About Annotation Switch"), "app.about")
+  }
+}
+
+template $AnnotationSwitchWindow : Adw.ApplicationWindow {
+  default-width: 400;
+  default-height: 400;
+
+  content: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      [end]
+      Gtk.MenuButton {
+        primary: true;
+        icon-name: "open-menu-symbolic";
+        tooltip-text: _("Menu");
+        menu-model: primary_menu;
+      }
+    }
+  };
+}
