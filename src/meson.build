@@ -2,6 +2,9 @@ annotation_switch_sources = [
   'main.vala',
   'application.vala',
   'window.vala',
+
+  # Models
+  'Models/Format.vala',
 ]
 
 annotation_switch_deps = [

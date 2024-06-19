@@ -14,6 +14,7 @@ menu primary_menu {
 }
 
 template $AnnotationSwitchWindow : Adw.ApplicationWindow {
+  title: _("Annotation Switch");
   default-width: 400;
   default-height: 400;
 
@@ -26,6 +27,62 @@ template $AnnotationSwitchWindow : Adw.ApplicationWindow {
         icon-name: "open-menu-symbolic";
         tooltip-text: _("Menu");
         menu-model: primary_menu;
+      }
+    }
+
+    Gtk.ScrolledWindow {
+      Adw.Clamp {
+        margin-top: 12;
+        margin-bottom: 24;
+        margin-start: 12;
+        margin-end: 12;
+        Gtk.Box {
+          orientation: vertical;
+          spacing: 18;
+
+          Adw.PreferencesGroup {
+            title: _("Source Annotations");
+
+            Adw.ComboRow source_format_row {
+              title: _("Format");
+            }
+
+            Adw.ActionRow source_row {
+              title: _("Source");
+              [suffix]
+              Gtk.Image {
+                icon-name: "folder-symbolic";
+              }
+            }
+          }
+
+          Adw.PreferencesGroup {
+            title: _("Target Annotations");
+            Adw.ComboRow target_format_row {
+              title: _("Format");
+            }
+
+            Adw.ActionRow target_row {
+              title: _("Target");
+              [suffix]
+              Gtk.Image {
+                icon-name: "folder-symbolic";
+              }
+            }
+          }
+
+          Adw.PreferencesGroup {
+            title: _("Mappings");
+
+            Adw.ActionRow {
+              title: _("From ID to class name");
+            }
+
+            Adw.ActionRow {
+              title: _("From class name to ID");
+            }
+          }
+        }
       }
     }
   };
