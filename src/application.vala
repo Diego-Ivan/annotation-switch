@@ -22,6 +22,9 @@ namespace AnnotationSwitch {
     public class Application : Adw.Application {
         public Application () {
             Object (application_id: "io.github.diegoivan.annotation_switch", flags: ApplicationFlags.DEFAULT_FLAGS);
+            Intl.setlocale (LocaleCategory.ALL, "");
+            Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.GNOMELOCALEDIR);
+            Intl.textdomain (Config.GETTEXT_PACKAGE);
         }
 
         construct {

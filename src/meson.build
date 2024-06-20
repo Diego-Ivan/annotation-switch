@@ -1,4 +1,5 @@
 annotation_switch_sources = [
+  '../vapi/config.vapi',
   'main.vala',
   'application.vala',
   'window.vala',
@@ -23,6 +24,22 @@ annotation_switch_sources = [
 
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
+
+conf = configuration_data()
+conf.set_quoted('APP_ID', 'io.github.diegoivan.annotation_switch')
+conf.set_quoted('APP_NAME', 'Annotation Switch')
+conf.set_quoted('G_LOG_DOMAIN', 'Annotation Switch')
+conf.set_quoted('VERSION', meson.project_version())
+conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+conf.set_quoted('DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
+conf.set_quoted('GNOMELOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+configure_file(output: 'config.h', configuration: conf)
+
+add_project_arguments(
+    '-include', 'config.h',
+    '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
+    language: 'c'
+)
 
 annotation_switch_deps = [
   dependency('gtk4'),
