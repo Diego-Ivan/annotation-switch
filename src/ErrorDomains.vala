@@ -5,7 +5,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public errordomain AnnotationSwitch.Error {
+public errordomain AnnotationSwitch.FileError {
     WRONG_DESTINATION,
     WRONG_SOURCE
+}
+
+public errordomain AnnotationSwitch.ParseError {
+    WRONG_FORMAT,
 }
