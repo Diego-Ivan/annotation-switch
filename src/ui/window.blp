@@ -82,6 +82,12 @@ template $AnnotationSwitchWindow : Adw.ApplicationWindow {
               title: _("From class name to ID");
             }
           }
+
+          Button {
+            styles ["suggested-action", "pill"]
+            halign: center;
+            label: _("Convert");
+          }
         }
       }
     }
