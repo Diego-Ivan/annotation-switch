@@ -10,7 +10,7 @@ public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.Form
     public void init (File destination) throws GLib.Error {
         FileInfo destination_info = destination.query_info ("standard::*", NOFOLLOW_SYMLINKS, null);
         if (destination_info.get_file_type () != DIRECTORY) {
-            throw new AnnotationSwitch.Error.WRONG_DESTINATION ("The destination must be a directory");
+            throw new AnnotationSwitch.FileError.WRONG_DESTINATION ("The destination must be a directory");
         }
     }
 

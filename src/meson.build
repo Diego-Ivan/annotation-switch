@@ -18,9 +18,13 @@ annotation_switch_sources = [
   'Serializer/Yolo5OBBSerializer.vala',
 ]
 
+cc = meson.get_compiler('c')
+m_dep = cc.find_library('m', required : false)
+
 annotation_switch_deps = [
   dependency('gtk4'),
   dependency('libadwaita-1', version: '>= 1.4'),
+  m_dep,
 ]
 
 gnome = import('gnome')
