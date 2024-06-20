@@ -16,7 +16,8 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
             throw new FileError.WRONG_SOURCE ("The source must be a directory");
         }
 
-        enumerator = source_directory.enumerate_children ("standard::name", NOFOLLOW_SYMLINKS, null);
+        enumerator = source.enumerate_children ("standard::*", NOFOLLOW_SYMLINKS, null);
+        source_directory = source;
     }
 
     public Annotation? get_next () throws Error 
@@ -24,6 +25,7 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
         var annotation = new Annotation ();
 
         string line = current_stream.read_line (null, null);
+        
         if (line == null) {
             return null;
         }
@@ -43,7 +45,7 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
             coordinates[i] = coord;
         }
 
-        annotation.source_file = next_info.get_name ();
+        annotation.source_file = next_info.get_name ().replace (".txt", ".png");
         annotation.class_name = elements[8];
 
         annotation.x_min = (int) Math.fminf (
@@ -61,7 +63,7 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
             Math.fminf (coordinates[5], coordinates[7])
         );
 
-        annotation.x_max = (int) Math.fmaxf (
+        annotation.y_max = (int) Math.fmaxf (
             Math.fmaxf (coordinates[1], coordinates[3]), 
             Math.fmaxf (coordinates[5], coordinates[7])
         );
@@ -70,14 +72,17 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
     }
     
     public bool has_next () {
-        if (current_stream.get_available () > 0) {
+        if (current_stream != null && current_stream.get_available () > 0) {
             return true;
         }
-        
-        next_info = look_for_next_text_file ();
-        if (next_info == null) {
-            return false;
+
+        if (current_stream == null || current_stream?.get_available () <= 0) {
+            next_info = look_for_next_text_file ();
+            if (next_info == null) {
+                return false;
+            }
         }
+
         File text_file = source_directory.resolve_relative_path (next_info.get_name ());
         try {
             current_stream?.close (null);
@@ -99,6 +104,7 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
         } catch (GLib.Error e) {
             warning (e.message);
         }
+        message (@"Returning $(info.get_name ())");
         return info;
     }
 }

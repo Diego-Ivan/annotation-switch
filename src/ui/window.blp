@@ -73,10 +73,12 @@ template $AnnotationSwitchWindow : Adw.ApplicationWindow {
             }
           }
 
-          Button {
+          Button convert_button {
             styles ["suggested-action", "pill"]
             halign: center;
             label: _("Convert");
+
+            clicked => $on_convert_button_clicked();
           }
         }
       }

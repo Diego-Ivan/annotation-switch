@@ -59,4 +59,27 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         source_format_row.model = parser_filtered;
         target_format_row.model = serializer_filtered;
     }
+
+    [GtkCallback]
+    private void on_convert_button_clicked () {
+        var parser = new Yolo5OBBParser ();
+
+        try {
+            parser.init (source_row.selected_file);
+        } catch (Error e) {
+            critical (e.message);
+        }
+
+        while (parser.has_next ()) {
+            try {
+                Annotation? annotation = parser.get_next ();
+                if (annotation == null) {
+                    continue;
+                }
+                print(@"$annotation\n");
+            } catch (Error e) {
+                critical (e.message);
+            }
+        }
+    }
 }
