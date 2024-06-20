@@ -1,0 +1,14 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $AnnotationSwitchFormatSourceRow : Adw.ActionRow {
+    title: _("Select Source");
+    subtitle: _("Example/Path/File.txt");
+
+    [suffix]
+    Button {
+        styles ["flat"]
+        valign: center;
+        icon-name: "folder-symbolic";
+    }
+}

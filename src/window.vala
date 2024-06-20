@@ -29,6 +29,10 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         Object (application: app);
     }
 
+    static construct {
+        typeof (FormatSourceRow).ensure ();
+    }
+
     construct {
         var list_store = new ListStore (typeof (Format));
         list_store.splice(0, 0, {

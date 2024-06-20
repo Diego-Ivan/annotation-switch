@@ -5,6 +5,9 @@ annotation_switch_sources = [
 
   'ErrorDomains.vala',
 
+  # Widgets
+  'Widgets/FormatSourceRow.vala',
+
   # Models
   'Models/Format.vala',
   'Models/Annotation.vala',
@@ -32,6 +35,7 @@ blueprint_compiler = find_program('blueprint-compiler')
 
 blueprints = files (
   'ui/window.blp',
+  'ui/format-source-row.blp',
 )
 
 resource_file = files('annotation-switch.gresource.xml')

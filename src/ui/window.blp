@@ -47,12 +47,7 @@ template $AnnotationSwitchWindow : Adw.ApplicationWindow {
               title: _("Format");
             }
 
-            Adw.ActionRow source_row {
-              title: _("Source");
-              [suffix]
-              Gtk.Image {
-                icon-name: "folder-symbolic";
-              }
+            $AnnotationSwitchFormatSourceRow source_row {
             }
           }
 
@@ -62,12 +57,7 @@ template $AnnotationSwitchWindow : Adw.ApplicationWindow {
               title: _("Format");
             }
 
-            Adw.ActionRow target_row {
-              title: _("Target");
-              [suffix]
-              Gtk.Image {
-                icon-name: "folder-symbolic";
-              }
+            $AnnotationSwitchFormatSourceRow target_row {
             }
           }
 
