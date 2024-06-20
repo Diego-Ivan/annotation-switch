@@ -13,3 +13,7 @@ public errordomain AnnotationSwitch.FileError {
 public errordomain AnnotationSwitch.ParseError {
     WRONG_FORMAT,
 }
+
+public errordomain AnnotationSwitch.SerializeError {
+    FAILED_TO_WRITE,
+}

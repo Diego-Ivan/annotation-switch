@@ -63,9 +63,11 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     [GtkCallback]
     private void on_convert_button_clicked () {
         var parser = new Yolo5OBBParser ();
+        var serializer = new Yolo5OBBSerializer ();
 
         try {
             parser.init (source_row.selected_file);
+            serializer.init (target_row.selected_file);
         } catch (Error e) {
             critical (e.message);
         }
@@ -77,9 +79,16 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
                     continue;
                 }
                 print(@"$annotation\n");
+                serializer.push ((owned) annotation);
             } catch (Error e) {
                 critical (e.message);
             }
+        }
+
+        try {
+            serializer.finish ();
+        } catch (Error e) {
+            warning (e.message);
         }
     }
 }

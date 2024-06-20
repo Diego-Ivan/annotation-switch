@@ -45,7 +45,8 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
             coordinates[i] = coord;
         }
 
-        annotation.source_file = next_info.get_name ().replace (".txt", ".png");
+        annotation.source_file = next_info.get_name ();
+        annotation.image = next_info.get_name ().replace (".txt", ".png");
         annotation.class_name = elements[8];
 
         annotation.x_min = (int) Math.fminf (
@@ -68,7 +69,7 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
             Math.fmaxf (coordinates[5], coordinates[7])
         );
 
-        return annotation;
+        return (owned) annotation;
     }
     
     public bool has_next () {
@@ -104,7 +105,6 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
         } catch (GLib.Error e) {
             warning (e.message);
         }
-        message (@"Returning $(info.get_name ())");
         return info;
     }
 }
