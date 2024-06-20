@@ -21,16 +21,16 @@
 [GtkTemplate (ui = "/io/github/diegoivan/annotation_switch/ui/window.ui")]
 public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     [GtkChild]
-    private Adw.ComboRow source_format_row;
+    private unowned Adw.ComboRow source_format_row;
     [GtkChild]
-    private Adw.ComboRow target_format_row;
+    private unowned Adw.ComboRow target_format_row;
+    [GtkChild]
+    private unowned FormatSourceRow source_row;
+    [GtkChild]
+    private unowned FormatSourceRow target_row;
 
     public Window (Gtk.Application app) {
         Object (application: app);
-    }
-
-    static construct {
-        typeof (FormatSourceRow).ensure ();
     }
 
     construct {
@@ -52,6 +52,9 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
 
         source_format_row.expression = name_expression;
         target_format_row.expression = name_expression;
+
+        source_format_row.bind_property ("selected-item", source_row, "format", SYNC_CREATE);
+        target_format_row.bind_property ("selected-item", target_row, "format", SYNC_CREATE);
 
         source_format_row.model = parser_filtered;
         target_format_row.model = serializer_filtered;

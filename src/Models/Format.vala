@@ -19,6 +19,7 @@ public class AnnotationSwitch.Format : Object {
     public SourceType source_type { get; construct; default = FILE; }
     public string name { get; construct; default = ""; }
     public ClassFormat class_format { get; construct; default = NAME; }
+    public string? file_extension { get; set; default = null; }
 
     public FormatParser? parser { get; set; default = null; }
     public FormatSerializer? serializer { get; set; default = null; }

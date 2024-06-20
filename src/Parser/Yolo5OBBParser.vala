@@ -70,6 +70,10 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
     }
     
     public bool has_next () {
+        if (current_stream.get_available () > 0) {
+            return true;
+        }
+        
         next_info = look_for_next_text_file ();
         if (next_info == null) {
             return false;

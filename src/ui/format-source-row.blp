@@ -3,12 +3,11 @@ using Adw 1;
 
 template $AnnotationSwitchFormatSourceRow : Adw.ActionRow {
     title: _("Select Source");
-    subtitle: _("Example/Path/File.txt");
-
     [suffix]
-    Button {
+    Button select_file_button {
         styles ["flat"]
         valign: center;
         icon-name: "folder-symbolic";
+        clicked => $on_select_file_clicked();
     }
 }
