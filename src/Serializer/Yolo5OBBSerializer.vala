@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public class AnnotationSwitch.Yolo5OBBSerializer : AnnotationSwitch.FormatSerializer {
+public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.FormatSerializer {
     private File destination = null;
     public void init (File destination) throws GLib.Error {
         FileInfo destination_info = destination.query_info ("standard::*", NOFOLLOW_SYMLINKS, null);

@@ -32,7 +32,24 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     construct {
         var list_store = new ListStore (typeof (Format));
         list_store.splice(0, 0, {
-            new Format ("Yolo V5 Oriented Bounding Boxes", FOLDER, NAME),
+            new Format ("Yolo V5 Oriented Bounding Boxes", FOLDER, NAME) {
+                parser = new Yolo5OBBParser (),
+                serializer = new Yolo5OBBSerializer ()
+            },
         });
+
+        var parser_filter = new Gtk.CustomFilter ((object) => ((Format) object).parser != null);
+        var serializer_filter = new Gtk.CustomFilter ((object) => ((Format) object).serializer != null);
+
+        var parser_filtered = new Gtk.FilterListModel (list_store, (owned) parser_filter);
+        var serializer_filtered = new Gtk.FilterListModel (list_store, (owned) serializer_filter);
+
+        var name_expression = new Gtk.PropertyExpression (typeof(Format), null, "name");
+
+        source_format_row.expression = name_expression;
+        target_format_row.expression = name_expression;
+
+        source_format_row.model = parser_filtered;
+        target_format_row.model = serializer_filtered;
     }
 }

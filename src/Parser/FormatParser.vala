@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public interface AnnotationSwitch.FormatParser {
+public interface AnnotationSwitch.FormatParser : Object {
     public abstract void init (File source) throws GLib.Error;
     public abstract Annotation? get_next ();
     public abstract bool has_next ();

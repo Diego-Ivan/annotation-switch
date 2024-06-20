@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public interface AnnotationSwitch.FormatSerializer {
+public interface AnnotationSwitch.FormatSerializer : Object {
     public abstract void init (File destination) throws GLib.Error;
     public abstract void push (Annotation annotation) throws GLib.Error;
     public abstract void finish () throws GLib.Error;

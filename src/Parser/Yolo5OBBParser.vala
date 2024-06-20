@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public class AnnotationSwitch.Yolo5OBBParser : AnnotationSwitch.FormatParser {
+public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatParser {
     private File source_directory = null;
     private FileEnumerator enumerator = null;
     private FileInfo? next_info = null;
