@@ -14,7 +14,7 @@
 [Compact (opaque = true)]
 public class AnnotationSwitch.Annotation {
     public string source_file { get; set; default = ""; }
-    public string image { get; set; default = ""; }
+    public string image { get; set; default = null; }
     public string class_name { get; set; default = ""; }
 
     public int difficulty { get; set; default = 0; }
