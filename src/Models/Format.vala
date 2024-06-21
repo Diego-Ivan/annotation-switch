@@ -12,7 +12,19 @@ public enum AnnotationSwitch.SourceType {
 
 public enum AnnotationSwitch.ClassFormat {
     ID,
-    NAME,
+    NAME;
+
+    public string to_string () {
+        switch (this) {
+        case ID:
+            // translators: this will be used in the following context: 'Transforming from Class ID to Class Name' and 'Transforming from Class Name to Class ID'
+            return _("Class ID");
+        case NAME:
+            // translators: this will be used in the following context: 'Transforming from Class ID to Class Name' and 'Transforming from Class Name to Class ID'
+            return _("Class Name");
+        }
+        assert_not_reached ();
+    }
 }
 
 public class AnnotationSwitch.Format : Object {

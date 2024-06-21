@@ -59,7 +59,7 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
         ) {
             source_file = next_info.get_name (),
             image = next_info.get_name ().replace (".txt", ".png"),
-            class_name = elements[8]
+            class_name = elements[8]._chug ()._chomp ()
         };
 
         return (owned) annotation;

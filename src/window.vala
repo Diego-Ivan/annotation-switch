@@ -62,12 +62,19 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
 
     [GtkCallback]
     private void on_convert_button_clicked () {
+        var source_format = (Format) source_format_row.selected_item;
+        var target_format = (Format) target_format_row.selected_item;
+
+        if (source_format.class_format != target_format.class_format) {
+            warning (@"This transformation requires mapping from $(source_format.class_format) to $(target_format.class_format)");
+        }
+
         var parser = new Yolo5OBBParser ();
         var serializer = new Yolo5OBBSerializer ();
 
         try {
             parser.init (source_row.selected_file);
-            serializer.init (target_row.selected_file);
+            serializer.init (target_row.selected_file, null);
         } catch (Error e) {
             critical (e.message);
         }
