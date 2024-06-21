@@ -11,6 +11,14 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
     private FileInfo? next_info = null;
     private DataInputStream? current_stream = null;
 
+    ~Yolo5OBBParser () {
+        try {
+            current_stream?.close ();
+        } catch (Error e) {
+            warning (e.message);
+        }
+    }
+
     public void init (File source) throws GLib.Error {
         if (source.query_file_type (NOFOLLOW_SYMLINKS, null) != DIRECTORY) {
             throw new FileError.WRONG_SOURCE ("The source must be a directory");
@@ -22,8 +30,6 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
 
     public Annotation? get_next () throws Error 
     requires (current_stream != null) {
-        var annotation = new Annotation ();
-
         string line = current_stream.read_line (null, null);
         
         if (line == null) {
@@ -45,29 +51,16 @@ public class AnnotationSwitch.Yolo5OBBParser : Object, AnnotationSwitch.FormatPa
             coordinates[i] = coord;
         }
 
-        annotation.source_file = next_info.get_name ();
-        annotation.image = next_info.get_name ().replace (".txt", ".png");
-        annotation.class_name = elements[8];
-
-        annotation.x_min = (int) Math.fminf (
-            Math.fminf (coordinates[0], coordinates[2]), 
-            Math.fminf (coordinates[4], coordinates[6])
-        );
-
-        annotation.x_max = (int) Math.fmaxf (
-            Math.fmaxf (coordinates[0], coordinates[2]), 
-            Math.fmaxf (coordinates[4], coordinates[6])
-        );
-
-        annotation.y_min = (int) Math.fminf (
-            Math.fminf (coordinates[1], coordinates[3]), 
-            Math.fminf (coordinates[5], coordinates[7])
-        );
-
-        annotation.y_max = (int) Math.fmaxf (
-            Math.fmaxf (coordinates[1], coordinates[3]), 
-            Math.fmaxf (coordinates[5], coordinates[7])
-        );
+        var annotation = new Annotation (
+            coordinates[0], coordinates[1], 
+            coordinates[2], coordinates[3],
+            coordinates[4], coordinates[5],
+            coordinates[6], coordinates[7]
+        ) {
+            source_file = next_info.get_name (),
+            image = next_info.get_name ().replace (".txt", ".png"),
+            class_name = elements[8]
+        };
 
         return (owned) annotation;
     }

@@ -43,11 +43,10 @@ public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.Form
         }
 
         foreach (unowned Annotation annotation in annotations) {
-            int x1, x2, x3, x4, y1, y2, y3, y4;
-            x1 = x4 = annotation.x_min;
-            x2 = x3 = annotation.x_max;
-            y1 = y2 = annotation.y_min;
-            y3 = y4 = annotation.y_max;
+            double x1 = annotation.position1.x, x2 = annotation.position2.x, 
+                x3 = annotation.position3.x, x4 = annotation.position4.x,
+                y1 = annotation.position1.y, y2 = annotation.position2.y,
+                y3 = annotation.position3.y, y4 = annotation.position4.y;
 
             string format = @"$x1 $y1 $x2 $y2 $x3 $y3 $x4 $y4 $(annotation.class_name) 0\n";
             output_stream.write (format.data);

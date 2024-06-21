@@ -16,6 +16,8 @@ public class AnnotationSwitch.Annotation {
     public string source_file { get; set; default = ""; }
     public string image { get; set; default = ""; }
     public string class_name { get; set; default = ""; }
+
+    public int difficulty { get; set; default = 0; }
     
     public Position position1 { get; private set; }
     public Position position2 { get; private set; }
@@ -23,10 +25,28 @@ public class AnnotationSwitch.Annotation {
     public Position position4 { get; private set; }
 
     public Annotation (double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
-        position1 = new Position (x1, y1);
-        position2 = new Position (x2, y2);
-        position3 = new Position (x3, y3);
-        position4 = new Position (x4, y4);
+        position1 = Position (x1, y1);
+        position2 = Position (x2, y2);
+        position3 = Position (x3, y3);
+        position4 = Position (x4, y4);
+    }
+
+    public Annotation.from_centers (double center_x, double center_y, double width, double height) {
+        double distance_x = width / 2.0;
+        double distance_y = height / 2.0;
+
+        double x1, y1, x2, y2, x3, y3, x4, y4;
+        x1 = x3 = center_x - distance_x;
+        x2 = x4 = center_x + distance_x;
+
+        y1 = y2 = center_y - distance_y;
+        y3 = y4 = center_y - distance_y;
+
+        this (x1, y1, x2, y2, x3, y3, x4, y4);
+    }
+
+    public Annotation.from_min_max (double x_min, double y_min, double x_max, double y_max) {
+        this (x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max);
     }
 
     public string to_string () {
@@ -78,8 +98,7 @@ public class AnnotationSwitch.Annotation {
     }
 }
 
-[Compact]
-public class AnnotationSwitch.Position {
+public struct AnnotationSwitch.Position {
     public double x;
     public double y;
 
