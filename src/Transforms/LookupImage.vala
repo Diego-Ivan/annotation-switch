@@ -10,7 +10,8 @@ public class AnnotationSwitch.LookupImage : Transform {
     private HashTable<string, string> source_to_image;
     private GenericSet<string> sources_without_image;
 
-    construct {
+    public LookupImage (File directory) {
+        this.directory = directory;
         source_to_image = new HashTable<string, string> (string.hash, str_equal);
         sources_without_image = new GenericSet<string> (string.hash, str_equal);
     }
