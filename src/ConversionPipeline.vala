@@ -12,11 +12,15 @@ public errordomain AnnotationSwitch.PipelineError {
 public class AnnotationSwitch.ConversionPipeline : Object {
     private GenericArray<Transform> transformations = new GenericArray<Transform> ();
 
-    public bool configured { get; private set; }
-    public File image_directory { get; private set; }
+    public bool configured { get; private set; default = false; }
+    public File image_directory { get; set; }
+    public HashTable<string, string> class_map { get; set; }
 
     public Format source { get; private set; }
     public Format target { get; private set; }
+
+    public void convert (FormatParser parser, FormatSerializer serializer) {
+    }
 
     public void configure (Format source, Format target, RequiredTransformations required_transforms) throws Error {
         this.source = source;
@@ -47,5 +51,14 @@ public class AnnotationSwitch.ConversionPipeline : Object {
             }
             transformations.add (new Denormalize (image_directory));
         }
+
+        if (NAME_TO_ID in required_transforms || ID_TO_NAME in required_transforms) {
+            if (class_map == null) {
+                throw new PipelineError.MISSING_REQUIREMENTS (@"Mapping is required to transform from $(source.name) to $(target.name)");
+            }
+            transformations.add (new ClassMapping (class_map));
+        }
+
+        configured = true;
     }
 }

@@ -11,6 +11,7 @@ public abstract class AnnotationSwitch.Transform {
 
 public errordomain AnnotationSwitch.TransformError {
     NO_IMAGE,
+    NO_MAPPING,
 }
 
 [Flags]
