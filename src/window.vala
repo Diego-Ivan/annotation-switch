@@ -99,11 +99,7 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         if (!target.contains_image_path) {
             return;
         }
-
-        if (source.named_after_image && target.named_after_image) {
-            return;
-        }
-
+        
         transforms |= LOOKUP_IMAGE;
     }
 

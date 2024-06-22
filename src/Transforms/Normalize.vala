@@ -8,6 +8,10 @@
 public class AnnotationSwitch.Normalize : Transform {
     public File image_directory { get; set; default = null; }
 
+    public Normalize (File image_directory) {
+        this.image_directory = image_directory;
+    }
+
     public override void apply (Format source, Format target, Annotation annotation) throws Error {
         File image_file = image_directory.resolve_relative_path (annotation.image);
         var image_pixbuf = new Gdk.Pixbuf.from_file (image_file.get_path ());

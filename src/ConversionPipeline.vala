@@ -22,20 +22,30 @@ public class AnnotationSwitch.ConversionPipeline : Object {
         this.source = source;
         this.target = target;
 
-        if (LOOKUP_IMAGE in required_transforms) {
-            configure_lookup_images (source, target);
-        }
-    }
-
-    private void configure_lookup_images (Format source, Format target) throws Error {
         if (source.named_after_image && target.named_after_image) {
             transformations.add (new ChangeExtension ());
             return;
         }
 
-        if (image_directory != null) {
-            throw new PipelineError.MISSING_REQUIREMENTS (@"Image directory is required to transform from $(source.name) to $(target.name), but none was provided");
+        if (LOOKUP_IMAGE in required_transforms) {
+            if (image_directory == null) {
+                throw new PipelineError.MISSING_REQUIREMENTS (@"Image directory is required to transform from $(source.name) to $(target.name), but none was provided");
+            }
+            transformations.add (new LookupImage (image_directory));
         }
-        transformations.add (new LookupImage (image_directory));
+
+        if (NORMALIZE in required_transforms) {
+            if (image_directory == null) {
+                throw new PipelineError.MISSING_REQUIREMENTS (@"Image directory is required to transform from $(source.name) to $(target.name), but none was provided");
+            }
+            transformations.add (new Normalize (image_directory));
+        }
+
+        if (DENORMALIZE in required_transforms) {
+            if (image_directory == null) {
+                throw new PipelineError.MISSING_REQUIREMENTS (@"Image directory is required to transform from $(source.name) to $(target.name), but none was provided");
+            }
+            transformations.add (new Denormalize (image_directory));
+        }
     }
 }
