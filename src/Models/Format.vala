@@ -30,8 +30,12 @@ public enum AnnotationSwitch.ClassFormat {
 public class AnnotationSwitch.Format : Object {
     public SourceType source_type { get; construct; default = FILE; }
     public string name { get; construct; default = ""; }
-    public ClassFormat class_format { get; construct; default = NAME; }
     public string? file_extension { get; set; default = null; }
+
+    /* Properties needed to configure the conversion pipeline */
+    public bool contains_image_path { get; set; default = false; }
+    public bool is_normalized { get; set; default = false; }
+    public ClassFormat class_format { get; construct; default = NAME; }
 
     public FormatParser? parser { get; set; default = null; }
     public FormatSerializer? serializer { get; set; default = null; }
