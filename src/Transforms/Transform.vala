@@ -6,7 +6,11 @@
  */
 
 public abstract class AnnotationSwitch.Transform {
-    public abstract void apply (Annotation annotation);
+    public abstract void apply (Format source, Format target, Annotation annotation) throws Error;
+}
+
+public errordomain AnnotationSwitch.TransformError {
+    NO_IMAGE,
 }
 
 [Flags]

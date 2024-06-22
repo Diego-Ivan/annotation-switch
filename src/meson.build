@@ -5,6 +5,7 @@ annotation_switch_sources = [
   'window.vala',
 
   'ErrorDomains.vala',
+  'ConversionPipeline.vala',
 
   # Widgets
   'Widgets/FormatSourceRow.vala',
@@ -24,6 +25,7 @@ annotation_switch_sources = [
 
   # Transforms:
   'Transforms/Transform.vala',
+  'Transforms/LookupImage.vala',
 ]
 
 cc = meson.get_compiler('c')
