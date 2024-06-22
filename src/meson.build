@@ -26,6 +26,8 @@ annotation_switch_sources = [
   # Transforms:
   'Transforms/Transform.vala',
   'Transforms/LookupImage.vala',
+  'Transforms/Normalize.vala',
+  'Transforms/Denormalize.vala',
 ]
 
 cc = meson.get_compiler('c')
