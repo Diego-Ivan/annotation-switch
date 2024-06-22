@@ -21,6 +21,9 @@ annotation_switch_sources = [
   # Serializer
   'Serializer/FormatSerializer.vala',
   'Serializer/Yolo5OBBSerializer.vala',
+
+  # Transforms:
+  'Transforms/Transform.vala',
 ]
 
 cc = meson.get_compiler('c')

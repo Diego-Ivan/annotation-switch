@@ -15,6 +15,7 @@ public class AnnotationSwitch.OIDv4Parser : FormatParser, Object {
         if (source_directory.query_file_type (NOFOLLOW_SYMLINKS, null) != DIRECTORY) {
             throw new FileError.WRONG_DESTINATION ("Destination must be a directory");
         }
+        enumerator = source_directory.enumerate_children ("standard::*", NOFOLLOW_SYMLINKS, null);
         source_directory = source;
     }
 

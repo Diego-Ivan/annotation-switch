@@ -34,6 +34,7 @@ public class AnnotationSwitch.Format : Object {
 
     /* Properties needed to configure the conversion pipeline */
     public bool contains_image_path { get; set; default = false; }
+    public bool named_after_image { get; set; default = false; }
     public bool is_normalized { get; set; default = false; }
     public ClassFormat class_format { get; construct; default = NAME; }
 

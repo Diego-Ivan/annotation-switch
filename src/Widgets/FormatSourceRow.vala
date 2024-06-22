@@ -77,11 +77,13 @@ public class AnnotationSwitch.FormatSourceRow : Adw.ActionRow {
     }
 
     private async void handle_single_file () {
-        var filter = new Gtk.FileFilter ();
-        filter.add_suffix (format.file_extension);
+        var filters = new ListStore (typeof (Gtk.FileFilter));
 
-        var filters = new ListStore (typeof(Gtk.FileFilter));
-        filters.append (filter);
+        if (format.file_extension != null) {
+            var filter = new Gtk.FileFilter ();
+            filter.add_suffix (format.file_extension);
+            filters.append (filter);
+        }
 
         var file_chooser = new Gtk.FileDialog () {
             filters = filters,

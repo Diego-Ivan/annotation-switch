@@ -37,8 +37,12 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         var list_store = new ListStore (typeof (Format));
         list_store.splice(0, 0, {
             new Format ("Yolo V5 Oriented Bounding Boxes", FOLDER, NAME) {
-                parser = new Yolo5OBBParser (),
-                serializer = new Yolo5OBBSerializer ()
+                parser = new Yolo5OBBParser (), serializer = new Yolo5OBBSerializer (),
+                file_extension = "txt", contains_image_path = false, named_after_image = true
+            },
+            new Format ("OIDV4", FOLDER, NAME) {
+                parser = new OIDv4Parser (),
+                file_extension = "txt", contains_image_path = false, is_normalized = false, named_after_image = true,
             },
         });
 
@@ -60,42 +64,98 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         target_format_row.model = serializer_filtered;
     }
 
-    [GtkCallback]
-    private void on_convert_button_clicked () {
+    private RequiredTransformations check_format_compatibility () {
         var source_format = (Format) source_format_row.selected_item;
         var target_format = (Format) target_format_row.selected_item;
 
-        if (source_format.class_format != target_format.class_format) {
-            warning (@"This transformation requires mapping from $(source_format.class_format) to $(target_format.class_format)");
+        RequiredTransformations transforms = 0;
+        check_normalization (source_format, target_format, ref transforms);
+        check_source (source_format, target_format, ref transforms);
+        check_mappings (source_format, target_format, ref transforms);
+
+        return transforms;
+    }
+
+    private void check_normalization (Format source, Format target, ref RequiredTransformations transforms) {
+        if (source.is_normalized == target.is_normalized) {
+            return;
         }
 
-        var parser = new Yolo5OBBParser ();
-        var serializer = new Yolo5OBBSerializer ();
-
-        try {
-            parser.init (source_row.selected_file);
-            serializer.init (target_row.selected_file, null);
-        } catch (Error e) {
-            critical (e.message);
+        if (source.is_normalized && !target.is_normalized) {
+            transforms |= NORMALIZE;
+        } else {
+            transforms |= DENORMALIZE;
         }
 
-        while (parser.has_next ()) {
-            try {
-                Annotation? annotation = parser.get_next ();
-                if (annotation == null) {
-                    continue;
-                }
-                print(@"$annotation\n");
-                serializer.push ((owned) annotation);
-            } catch (Error e) {
-                critical (e.message);
-            }
+        if (!source.contains_image_path) {
+            transforms |= LOOKUP_IMAGE;
+        }
+    }
+
+    private void check_source (Format source, Format target, ref RequiredTransformations transforms) {
+        if (source.contains_image_path == target.contains_image_path) {
+            return;
+        }
+        if (!target.contains_image_path) {
+            return;
         }
 
-        try {
-            serializer.finish ();
-        } catch (Error e) {
-            warning (e.message);
+        if (source.named_after_image && target.named_after_image) {
+            return;
         }
+
+        transforms |= LOOKUP_IMAGE;
+    }
+
+    private void check_mappings (Format source, Format target, ref RequiredTransformations transforms) {
+        if (source.class_format == target.class_format) {
+            return;
+        }
+
+        if (source.class_format == NAME) {
+            transforms |= NAME_TO_ID;
+        } else {
+            transforms |= ID_TO_NAME;
+        }
+    }
+
+    [GtkCallback]
+    private void on_convert_button_clicked () {
+        message (@"$(check_format_compatibility ())");
+        //  var source_format = (Format) source_format_row.selected_item;
+        //  var target_format = (Format) target_format_row.selected_item;
+
+        //  if (source_format.class_format != target_format.class_format) {
+        //      warning (@"This transformation requires mapping from $(source_format.class_format) to $(target_format.class_format)");
+        //  }
+
+        //  var parser = new Yolo5OBBParser ();
+        //  var serializer = new Yolo5OBBSerializer ();
+
+        //  try {
+        //      parser.init (source_row.selected_file);
+        //      serializer.init (target_row.selected_file, null);
+        //  } catch (Error e) {
+        //      critical (e.message);
+        //  }
+
+        //  while (parser.has_next ()) {
+        //      try {
+        //          Annotation? annotation = parser.get_next ();
+        //          if (annotation == null) {
+        //              continue;
+        //          }
+        //          print(@"$annotation\n");
+        //          serializer.push ((owned) annotation);
+        //      } catch (Error e) {
+        //          critical (e.message);
+        //      }
+        //  }
+
+        //  try {
+        //      serializer.finish ();
+        //  } catch (Error e) {
+        //      warning (e.message);
+        //  }
     }
 }
