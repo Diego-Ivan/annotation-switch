@@ -47,15 +47,18 @@ namespace AnnotationSwitch {
         }
 
         private void on_about_action () {
-            string[] developers = { "Diego Iván" };
+            string[] developers = { "Diego Iván M.E" };
             var about = new Adw.AboutWindow () {
                 transient_for = this.active_window,
-                application_name = "annotation-switch",
+                application_name = "Annotation Switch",
                 application_icon = "io.github.diegoivan.annotation_switch",
-                developer_name = "Diego Iván",
-                version = "0.1.0",
+                copyright = "© 2024 Diego Iván M.E",
+                developer_name = "Diego Iván M.E",
                 developers = developers,
-                copyright = "© 2024 Diego Iván",
+                license_type = GPL_3_0,
+                // translators: Write your name<email> here :D
+                translator_credits = _("translator_credits"),
+                version = Config.VERSION,
             };
 
             about.present ();
