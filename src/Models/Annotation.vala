@@ -10,6 +10,9 @@
  *
  * The class supports computing the oriented bounding box to normal bounding boxes,
  * of course with a loss of information as consequence.
+ *
+ * The inputs to this class are expected to not be normalized. As an option, there are methods to normalize and denormalize with respect
+ * to the given image proportions. The only annotations that are normalized are the ones returned from this class.
  */
 [Compact (opaque = true)]
 public class AnnotationSwitch.Annotation {
@@ -19,16 +22,24 @@ public class AnnotationSwitch.Annotation {
 
     public int difficulty { get; set; default = 0; }
     
-    public Position position1 { get; private set; }
-    public Position position2 { get; private set; }
-    public Position position3 { get; private set; }
-    public Position position4 { get; private set; }
+    public double x1 { get; set; default = 0; }
+    public double y1 { get; set; default = 0; }
+    public double x2 { get; set; default = 0; }
+    public double y2 { get; set; default = 0; }
+    public double x3 { get; set; default = 0; }
+    public double y3 { get; set; default = 0; }
+    public double x4 { get; set; default = 0; }
+    public double y4 { get; set; default = 0; }
 
     public Annotation (double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
-        position1 = Position (x1, y1);
-        position2 = Position (x2, y2);
-        position3 = Position (x3, y3);
-        position4 = Position (x4, y4);
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = y3;
+        this.x4 = x4;
+        this.y4 = y4;
     }
 
     public Annotation.from_centers (double center_x, double center_y, double width, double height) {
@@ -50,34 +61,34 @@ public class AnnotationSwitch.Annotation {
     }
 
     public string to_string () {
-        return @"Position 1: $position1, Position 2: $position2, Position 3: $position3, Position 4: $position4. Class Name: $class_name. Source: $source_file. Source Image: $image";
+        return @"x1: $x1, y1: $y1, x2: $x2, y2: $y2, x3: $x3, y3: $y3, x4: $x4, y4: $y4. Class Name: $class_name. Source: $source_file. Source Image: $image";
     }
 
     public double compute_x_max () {
         return Math.fmax (
-            Math.fmax (position1.x, position2.x),
-            Math.fmax (position3.x, position4.x)
+            Math.fmax (x1, x2),
+            Math.fmax (x3, x4)
         );
     }
 
     public double compute_x_min () {
         return Math.fmin (
-            Math.fmin (position1.x, position2.x),
-            Math.fmin (position3.x, position4.x)
+            Math.fmin (x1, x2),
+            Math.fmin (x3, x4)
         );
     }
 
     public double compute_y_max () {
         return Math.fmax (
-            Math.fmax (position1.y, position2.y),
-            Math.fmax (position3.y, position4.y)
+            Math.fmax (y1, y2),
+            Math.fmax (y3, y4)
         );
     }
 
     public double compute_y_min () {
         return Math.fmin (
-            Math.fmin (position1.y, position2.y),
-            Math.fmin (position3.y, position4.y)
+            Math.fmin (y1, y2),
+            Math.fmin (y3, y4)
         );
     }
 
@@ -95,19 +106,5 @@ public class AnnotationSwitch.Annotation {
 
     public double compute_y_center () {
         return (compute_y_max () + compute_y_min ()) / 2.0;
-    }
-}
-
-public struct AnnotationSwitch.Position {
-    public double x;
-    public double y;
-
-    public Position (double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public string to_string () {
-        return @"x: $x, y: $y";
     }
 }

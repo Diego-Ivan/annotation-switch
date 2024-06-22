@@ -54,10 +54,10 @@ public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.Form
                 class_name = annotation.class_name;
             }
 
-            double x1 = annotation.position1.x, x2 = annotation.position2.x, 
-                x3 = annotation.position3.x, x4 = annotation.position4.x,
-                y1 = annotation.position1.y, y2 = annotation.position2.y,
-                y3 = annotation.position3.y, y4 = annotation.position4.y;
+            double x1 = annotation.x1, x2 = annotation.x2, 
+                x3 = annotation.x3, x4 = annotation.x4,
+                y1 = annotation.y1, y2 = annotation.y2,
+                y3 = annotation.y3, y4 = annotation.y4;
 
             string format = @"$x1 $y1 $x2 $y2 $x3 $y3 $x4 $y4 $class_name 0\n";
             output_stream.write (format.data);
