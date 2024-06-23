@@ -30,7 +30,7 @@ public class AnnotationSwitch.FormatRegistry : Object {
         };
 
         formats["oidv4"] = new Format ("OID v4", "oidv4") {
-            parser_type = typeof (OIDv4Parser),
+            parser_type = typeof (OIDv4Parser), serializer_type = typeof (OIDv4Serializer),
             file_extension = "txt", contains_image_path = false, named_after_image = true,
             is_normalized = false, class_format = NAME, source_type = FOLDER
         };

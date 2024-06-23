@@ -19,19 +19,18 @@ public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.Form
     }
 
     public void push (owned Annotation annotation) {
-        if (!(annotation.image in annotation_map)) {
-            annotation_map[annotation.image] = new GenericArray<Annotation> ();
+        if (!(annotation.source_file in annotation_map)) {
+            annotation_map[annotation.source_file] = new GenericArray<Annotation> ();
         }
 
-        GenericArray<Annotation> image_annotations = annotation_map[annotation.image];
+        GenericArray<Annotation> image_annotations = annotation_map[annotation.source_file];
         image_annotations.add ((owned) annotation);
     }
     public void finish () throws GLib.Error {
-        foreach (string image in annotation_map.get_keys ()) {
-            string text_name = image.replace (".png", ".txt");
-            File text_file = destination.resolve_relative_path (text_name);
+        foreach (string source_file in annotation_map.get_keys ()) {
+            File text_file = destination.resolve_relative_path (source_file);
 
-            write_to_file (text_file, annotation_map[image]);
+            write_to_file (text_file, annotation_map[source_file]);
         }
     }
 

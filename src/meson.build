@@ -23,6 +23,7 @@ annotation_switch_sources = [
   # Serializer
   'Serializer/FormatSerializer.vala',
   'Serializer/Yolo5OBBSerializer.vala',
+  'Serializer/OIDv4Serializer.vala',
 
   # Transforms:
   'Transforms/Transform.vala',
