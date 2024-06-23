@@ -16,14 +16,6 @@ public class AnnotationSwitch.FileChooserRow : Adw.ActionRow {
         }
         set {
             _mode = value;
-            switch (_mode) {
-            case FILE:
-                title = _("Select File");
-                break;
-            case FOLDER:
-                title = _("Select Folder");
-                break;
-            }
         }
     }
 
