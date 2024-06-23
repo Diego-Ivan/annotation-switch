@@ -28,24 +28,24 @@ public enum AnnotationSwitch.ClassFormat {
 }
 
 public class AnnotationSwitch.Format : Object {
-    public SourceType source_type { get; construct; default = FILE; }
     public string name { get; construct; default = ""; }
-    public string? file_extension { get; set; default = null; }
+    public string id { get; construct; default = ""; }
 
+    public Type parser_type { get; set; default = Type.INVALID; }
+    public Type serializer_type { get; set; default = Type.INVALID; }
+    
     /* Properties needed to configure the conversion pipeline */
+    public string? file_extension { get; set; default = null; }
     public bool contains_image_path { get; set; default = false; }
     public bool named_after_image { get; set; default = false; }
     public bool is_normalized { get; set; default = false; }
-    public ClassFormat class_format { get; construct; default = NAME; }
+    public ClassFormat class_format { get; set; default = NAME; }
+    public SourceType source_type { get; set; default = FILE; }
 
-    public FormatParser? parser { get; set; default = null; }
-    public FormatSerializer? serializer { get; set; default = null; }
-
-    public Format (string name, SourceType source_type, ClassFormat class_format) {
+    public Format (string name, string id) {
         Object (
             name: name, 
-            source_type: source_type, 
-            class_format: class_format
+            id: id
         );
     }
 }

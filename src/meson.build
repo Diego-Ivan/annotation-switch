@@ -6,6 +6,7 @@ annotation_switch_sources = [
 
   'ErrorDomains.vala',
   'ConversionPipeline.vala',
+  'FormatRegistry.vala',
 
   # Widgets
   'Widgets/FileChooserRow.vala',

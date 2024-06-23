@@ -44,36 +44,21 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     }
 
     construct {
-        var list_store = new ListStore (typeof (Format));
-        list_store.splice(0, 0, {
-            new Format ("Yolo V5 Oriented Bounding Boxes", FOLDER, NAME) {
-                parser = new Yolo5OBBParser (), serializer = new Yolo5OBBSerializer (),
-                file_extension = "txt", contains_image_path = false, named_after_image = true
-            },
-            new Format ("OIDV4", FOLDER, NAME) {
-                parser = new OIDv4Parser (),
-                file_extension = "txt", contains_image_path = false, is_normalized = false, named_after_image = true,
-            },
-        });
+        var registry = FormatRegistry.get_instance ();
+        ListModel parseable_formats = registry.get_formats_with_parser ();
+        ListModel serializable_formats = registry.get_formats_with_serializer ();
 
-        var parser_filter = new Gtk.CustomFilter ((object) => ((Format) object).parser != null);
-        var serializer_filter = new Gtk.CustomFilter ((object) => ((Format) object).serializer != null);
-
-        var parser_filtered = new Gtk.FilterListModel (list_store, (owned) parser_filter);
-        var serializer_filtered = new Gtk.FilterListModel (list_store, (owned) serializer_filter);
-
-        var name_expression = new Gtk.PropertyExpression (typeof(Format), null, "name");
-
-        source_format_row.expression = name_expression;
-        target_format_row.expression = name_expression;
+        source_format_row.expression = 
+        target_format_row.expression = 
+            new Gtk.PropertyExpression (typeof(Format), null, "name");;
 
         source_format_row.notify["selected"]
             .connect (() => change_formats (source_format_row, source_row));
         target_format_row.notify["selected"]
             .connect (() => change_formats (target_format_row, target_row));
 
-        source_format_row.model = parser_filtered;
-        target_format_row.model = serializer_filtered;
+        source_format_row.model = parseable_formats;
+        target_format_row.model = serializable_formats;
     }
 
     private void change_formats (Adw.ComboRow combo_row, FileChooserRow filechooser_row) {
@@ -134,9 +119,7 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
             transforms |= DENORMALIZE;
         }
 
-        if (!source.contains_image_path) {
-            transforms |= LOOKUP_IMAGE;
-        }
+        transforms |= LOOKUP_IMAGE;
     }
 
     private void check_source (Format source, Format target, ref RequiredTransformations transforms) {
@@ -165,40 +148,34 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     [GtkCallback]
     private void on_convert_button_clicked () {
         message (@"$(check_format_compatibility ())");
-        //  var source_format = (Format) source_format_row.selected_item;
-        //  var target_format = (Format) target_format_row.selected_item;
 
-        //  if (source_format.class_format != target_format.class_format) {
-        //      warning (@"This transformation requires mapping from $(source_format.class_format) to $(target_format.class_format)");
-        //  }
+        var parser = new Yolo5OBBParser ();
+        var serializer = new Yolo5OBBSerializer ();
 
-        //  var parser = new Yolo5OBBParser ();
-        //  var serializer = new Yolo5OBBSerializer ();
+        try {
+            parser.init (source_row.selected_file);
+            serializer.init (target_row.selected_file, null);
+        } catch (Error e) {
+            critical (e.message);
+        }
 
-        //  try {
-        //      parser.init (source_row.selected_file);
-        //      serializer.init (target_row.selected_file, null);
-        //  } catch (Error e) {
-        //      critical (e.message);
-        //  }
+        while (parser.has_next ()) {
+            try {
+                Annotation? annotation = parser.get_next ();
+                if (annotation == null) {
+                    continue;
+                }
+                print(@"$annotation\n");
+                serializer.push ((owned) annotation);
+            } catch (Error e) {
+                critical (e.message);
+            }
+        }
 
-        //  while (parser.has_next ()) {
-        //      try {
-        //          Annotation? annotation = parser.get_next ();
-        //          if (annotation == null) {
-        //              continue;
-        //          }
-        //          print(@"$annotation\n");
-        //          serializer.push ((owned) annotation);
-        //      } catch (Error e) {
-        //          critical (e.message);
-        //      }
-        //  }
-
-        //  try {
-        //      serializer.finish ();
-        //  } catch (Error e) {
-        //      warning (e.message);
-        //  }
+        try {
+            serializer.finish ();
+        } catch (Error e) {
+            warning (e.message);
+        }
     }
 }
