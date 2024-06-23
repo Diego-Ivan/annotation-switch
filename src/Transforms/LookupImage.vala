@@ -51,3 +51,8 @@ public class AnnotationSwitch.ChangeExtension : Transform {
         }
     }
 }
+
+public class AnnotationSwitch.FromImageExtension : Transform {
+    public override void apply (Format source, Format target, Annotation annotation) throws Error {
+    }
+}

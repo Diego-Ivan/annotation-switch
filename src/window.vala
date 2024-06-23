@@ -91,9 +91,26 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         image_directory_row.visible = LOOKUP_IMAGE in transformations;
         mappings_row.visible = NAME_TO_ID in transformations || ID_TO_NAME in transformations;
 
-        if (transformations != 0x0) {
-            convert_button.sensitive = false;
+        allow_conversion (transformations);
+    }
+
+    private void allow_conversion (RequiredTransformations transforms) {
+        if (source_row.selected_file == null || target_row.selected_file == null) {
+            return;
         }
+
+        if (LOOKUP_IMAGE in transforms && image_directory_row.selected_file == null) {
+            convert_button.sensitive = false;
+            return;
+        }
+
+        bool has_mapping = NAME_TO_ID in transforms || ID_TO_NAME in transforms;
+        if (has_mapping && mappings_row.selected_file == null) {
+            convert_button.sensitive = false;
+            return;
+        }
+
+        convert_button.sensitive = true;
     }
 
     private RequiredTransformations check_format_compatibility () {
@@ -138,9 +155,18 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
             return;
         }
 
-        if (source.class_format == NAME) {
+        if (source.class_format == BOTH) {
+            return;
+        }
+
+        bool target_requires_id = target.class_format == BOTH || target.class_format == ID;
+        if (source.class_format == NAME && target_requires_id) {
             transforms |= NAME_TO_ID;
-        } else {
+            return;
+        }
+
+        bool target_requires_name = target.class_format == BOTH || target.class_format == NAME;
+        if (source.class_format == ID && target_requires_name) {
             transforms |= ID_TO_NAME;
         }
     }

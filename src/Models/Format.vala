@@ -11,6 +11,7 @@ public enum AnnotationSwitch.SourceType {
 }
 
 public enum AnnotationSwitch.ClassFormat {
+    BOTH,
     ID,
     NAME;
 
@@ -22,6 +23,8 @@ public enum AnnotationSwitch.ClassFormat {
         case NAME:
             // translators: this will be used in the following context: 'Transforming from Class ID to Class Name' and 'Transforming from Class Name to Class ID'
             return _("Class Name");
+        case BOTH:
+            return _("Class ID and Name");
         }
         assert_not_reached ();
     }
@@ -39,6 +42,7 @@ public class AnnotationSwitch.Format : Object {
     public bool contains_image_path { get; set; default = false; }
     public bool named_after_image { get; set; default = false; }
     public bool is_normalized { get; set; default = false; }
+    public bool contains_mapping { get; set; default = false; }
     public ClassFormat class_format { get; set; default = NAME; }
     public SourceType source_type { get; set; default = FILE; }
 

@@ -18,7 +18,8 @@
 public class AnnotationSwitch.Annotation {
     public string source_file { get; set; default = ""; }
     public string image { get; set; default = null; }
-    public string class_name { get; set; default = ""; }
+    public string class_name { get; set; default = null; }
+    public string class_id { get; set; default = null; }
 
     public int difficulty { get; set; default = 0; }
     
