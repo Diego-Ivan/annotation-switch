@@ -180,7 +180,7 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
 
         try {
             parser.init (source_row.selected_file);
-            serializer.init (target_row.selected_file, null);
+            // serializer.init (target_row.selected_file, null);
         } catch (Error e) {
             critical (e.message);
         }

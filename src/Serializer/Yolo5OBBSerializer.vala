@@ -8,16 +8,13 @@
 public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.FormatSerializer {
     private File destination = null;
     private HashTable<string, GenericArray<Annotation>> annotation_map;
-    private HashTable<string, string>? mapping;
 
-    public void init (File destination, HashTable<string, string>? mapping) throws GLib.Error {
+    public void init (File destination) throws GLib.Error {
         FileInfo destination_info = destination.query_info ("standard::*", NOFOLLOW_SYMLINKS, null);
         if (destination_info.get_file_type () != DIRECTORY) {
             throw new AnnotationSwitch.FileError.WRONG_DESTINATION ("The destination must be a directory");
         }
         this.destination = destination;
-        this.mapping = mapping;
-
         annotation_map = new HashTable<string, GenericArray<Annotation>> (string.hash, str_equal);
     }
 
@@ -46,14 +43,6 @@ public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.Form
 
         foreach (unowned Annotation annotation in annotations) {
             string class_name = null;
-            if (mapping != null) {
-                class_name = mapping[annotation.class_name];
-            }
-
-            if (class_name == null) {
-                class_name = annotation.class_name;
-            }
-
             double x1 = annotation.x1, x2 = annotation.x2, 
                 x3 = annotation.x3, x4 = annotation.x4,
                 y1 = annotation.y1, y2 = annotation.y2,
