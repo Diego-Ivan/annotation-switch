@@ -25,9 +25,9 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     [GtkChild]
     private unowned Adw.ComboRow target_format_row;
     [GtkChild]
-    private unowned FormatSourceRow source_row;
+    private unowned FileChooserRow source_row;
     [GtkChild]
-    private unowned FormatSourceRow target_row;
+    private unowned FileChooserRow target_row;
 
     public Window (Gtk.Application app) {
         Object (application: app);
@@ -57,8 +57,21 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         source_format_row.expression = name_expression;
         target_format_row.expression = name_expression;
 
-        source_format_row.bind_property ("selected-item", source_row, "format", SYNC_CREATE);
-        target_format_row.bind_property ("selected-item", target_row, "format", SYNC_CREATE);
+        source_format_row.notify["selected"].connect (() => {
+            var format = (Format) source_format_row.selected_item;
+            if (format == null) {
+                return;
+            }
+            source_row.source_type = format.source_type;
+        });
+
+        target_format_row.notify["selected"].connect (() => {
+            var format = (Format) source_format_row.selected_item;
+            if (format == null) {
+                return;
+            }
+            target_row.source_type = format.source_type;
+        });
 
         source_format_row.model = parser_filtered;
         target_format_row.model = serializer_filtered;

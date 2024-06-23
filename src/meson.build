@@ -8,7 +8,7 @@ annotation_switch_sources = [
   'ConversionPipeline.vala',
 
   # Widgets
-  'Widgets/FormatSourceRow.vala',
+  'Widgets/FileChooserRow.vala',
 
   # Models
   'Models/Format.vala',
@@ -61,7 +61,7 @@ blueprint_compiler = find_program('blueprint-compiler')
 
 blueprints = files (
   'ui/window.blp',
-  'ui/format-source-row.blp',
+  'ui/file-chooser-row.blp',
 )
 
 resource_file = files('annotation-switch.gresource.xml')

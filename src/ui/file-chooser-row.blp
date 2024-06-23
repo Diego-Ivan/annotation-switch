@@ -1,13 +1,13 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $AnnotationSwitchFormatSourceRow : Adw.ActionRow {
+template $AnnotationSwitchFileChooserRow : Adw.ActionRow {
     title: _("Select Source");
     [suffix]
     Button select_file_button {
         styles ["flat"]
         valign: center;
         icon-name: "folder-symbolic";
-        clicked => $on_select_file_clicked();
+        clicked => $choose_file();
     }
 }
