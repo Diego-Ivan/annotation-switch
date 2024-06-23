@@ -15,7 +15,11 @@ public class AnnotationSwitch.FileChooserRow : Adw.ActionRow {
             return _mode;
         }
         set {
+            if (value == _mode) {
+                return;
+            }
             _mode = value;
+            selected_file = null;
         }
     }
 
@@ -27,6 +31,7 @@ public class AnnotationSwitch.FileChooserRow : Adw.ActionRow {
         set {
             _selected_file = value;
             if (value == null) {
+                subtitle = "";
                 return;
             }
             update_filename.begin ();

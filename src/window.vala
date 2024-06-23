@@ -24,10 +24,20 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     private unowned Adw.ComboRow source_format_row;
     [GtkChild]
     private unowned Adw.ComboRow target_format_row;
+    
+    [GtkChild]
+    private unowned Adw.PreferencesGroup additional_group;
+    [GtkChild]
+    private unowned FileChooserRow image_directory_row;
+    [GtkChild]
+    private unowned FileChooserRow mappings_row;
+    
     [GtkChild]
     private unowned FileChooserRow source_row;
     [GtkChild]
     private unowned FileChooserRow target_row;
+    [GtkChild]
+    private unowned Gtk.Button convert_button;
 
     public Window (Gtk.Application app) {
         Object (application: app);
@@ -57,24 +67,48 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         source_format_row.expression = name_expression;
         target_format_row.expression = name_expression;
 
-        source_format_row.notify["selected"].connect (() => {
-            var format = (Format) source_format_row.selected_item;
-            if (format == null) {
-                return;
-            }
-            source_row.source_type = format.source_type;
-        });
-
-        target_format_row.notify["selected"].connect (() => {
-            var format = (Format) source_format_row.selected_item;
-            if (format == null) {
-                return;
-            }
-            target_row.source_type = format.source_type;
-        });
+        source_format_row.notify["selected"]
+            .connect (() => change_formats (source_format_row, source_row));
+        target_format_row.notify["selected"]
+            .connect (() => change_formats (target_format_row, target_row));
 
         source_format_row.model = parser_filtered;
         target_format_row.model = serializer_filtered;
+    }
+
+    private void change_formats (Adw.ComboRow combo_row, FileChooserRow filechooser_row) {
+        var format = (Format) combo_row.selected_item;
+        if (format == null) {
+            return;
+        }
+
+        filechooser_row.source_type = format.source_type;
+        switch (format.source_type) {
+        case FILE:
+            filechooser_row.title = _("Select a file");
+            break;
+        case FOLDER:
+            filechooser_row.title = _("Select a folder");
+            break;
+        }
+
+        var source_format = (Format) source_format_row.selected_item;
+        var target_format = (Format) target_format_row.selected_item;
+
+        if (source_format == null || target_format == null) {
+            return;
+        }
+
+        RequiredTransformations transformations = check_format_compatibility ();
+
+        /* Change visibility of widgets if they are needed or not */
+        additional_group.visible = transformations != 0x0;
+        image_directory_row.visible = LOOKUP_IMAGE in transformations;
+        mappings_row.visible = NAME_TO_ID in transformations || ID_TO_NAME in transformations;
+
+        if (transformations != 0x0) {
+            convert_button.sensitive = false;
+        }
     }
 
     private RequiredTransformations check_format_compatibility () {

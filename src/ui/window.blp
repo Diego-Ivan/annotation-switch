@@ -61,15 +61,15 @@ template $AnnotationSwitchWindow : Adw.ApplicationWindow {
             }
           }
 
-          Adw.PreferencesGroup {
-            title: _("Mappings");
+          Adw.PreferencesGroup additional_group {
+            title: _("Additional Data");
 
-            Adw.ActionRow {
-              title: _("From ID to class name");
+            $AnnotationSwitchFileChooserRow image_directory_row {
+              title: _("Image folder");
             }
 
-            Adw.ActionRow {
-              title: _("From class name to ID");
+            $AnnotationSwitchFileChooserRow mappings_row {
+              title: _("Category Mapping (CSV)");
             }
           }
 
