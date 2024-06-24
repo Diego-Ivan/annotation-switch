@@ -16,19 +16,68 @@ public class AnnotationSwitch.ConversionPipeline : Object {
     public File image_directory { get; set; }
     public HashTable<string, string> class_map { get; set; }
 
-    public Format source { get; private set; }
-    public Format target { get; private set; }
+    public File conversion_source { get; set; }
+    public File conversion_target { get; set; }
 
-    public void convert (FormatParser parser, FormatSerializer serializer) {
+    public Format source { get; construct; }
+    public Format target { get; construct; }
+
+    public ConversionPipeline (Format source, Format target) {
+        Object (source: source, target: target);
     }
 
-    public void configure (Format source, Format target, RequiredTransformations required_transforms) throws Error {
-        this.source = source;
-        this.target = target;
+    public void convert () 
+    requires (source != null)
+    requires (target != null)
+    requires (conversion_source != null)
+    requires (conversion_target != null)
+    requires (configured) {
+        var registry = FormatRegistry.get_instance ();
+        FormatParser? parser = registry.get_parser_for_id (source.id);
+        FormatSerializer? serializer = registry.get_serializer_for_id (target.id);
 
+        if (parser == null) {
+            critical (@"Format $(source.name) is missing a parser");
+            return;
+        }
+
+        if (serializer == null) {
+            critical (@"Format $(target.name) is missing a serializer");
+            return;
+        }
+
+        try {
+            parser.init (conversion_source);
+            serializer.init (conversion_target);
+        } catch (Error e) {
+            critical (e.message);
+            return;
+        }
+
+        message ("Starting conversion");
+
+        while (parser.has_next ()) {
+            try {
+                Annotation annotation = parser.get_next ();
+                print (@"$annotation\n");
+                serializer.push ((owned) annotation);
+            } catch (Error e) {
+                warning (e.message);
+            }
+        }
+
+        try {
+            serializer.finish ();
+        } catch (Error e) {
+            warning (e.message);
+        }
+    }
+
+    public void configure (RequiredTransformations required_transforms) throws Error 
+    requires (source != null)
+    requires (target != null) {
         if (source.named_after_image && target.named_after_image) {
             transformations.add (new ChangeExtension ());
-            return;
         }
 
         if (LOOKUP_IMAGE in required_transforms) {

@@ -42,6 +42,38 @@ public class AnnotationSwitch.FormatRegistry : Object {
         };
     }
 
+    public Format? get_from_id (string id) {
+        if (!(id in formats)) {
+            critical (@"The Registry does not contain a format with id $id");
+            return null;
+        }
+        return formats[id];
+    }
+
+    public FormatSerializer? get_serializer_for_id (string id) {
+        Format? format = get_from_id (id);
+        if (format == null) {
+            return null;
+        }
+        if (format.serializer_type == Type.INVALID) {
+            critical (@"Format: $(format.name) with id $id does not have a serializer registered");
+            return null;
+        }
+        return (FormatSerializer) Object.new (format.serializer_type);
+    }
+
+    public FormatParser? get_parser_for_id (string id) {
+        Format? format = get_from_id (id);
+        if (format == null) {
+            return null;
+        }
+        if (format.parser_type == Type.INVALID) {
+            critical (@"Format: $(format.name) with id $id does not have a parser registered");
+        }
+
+        return (FormatParser) Object.new (format.parser_type);
+    }
+
     public ListModel get_formats_with_parser () {
         var store = new ListStore (typeof (Format));
         foreach (Format format in formats.get_values ()) {

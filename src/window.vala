@@ -57,6 +57,11 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         target_format_row.notify["selected"]
             .connect (() => change_formats (target_format_row, target_row));
 
+        mappings_row.notify["selected-file"].connect (allow_conversion);
+        source_row.notify["selected-file"].connect (allow_conversion);
+        target_row.notify["selected-file"].connect (allow_conversion);
+        image_directory_row.notify["selected-file"].connect (allow_conversion);
+
         source_format_row.model = parseable_formats;
         target_format_row.model = serializable_formats;
     }
@@ -84,18 +89,19 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
             return;
         }
 
-        RequiredTransformations transformations = check_format_compatibility ();
-
-        /* Change visibility of widgets if they are needed or not */
-        additional_group.visible = transformations != 0x0;
-        image_directory_row.visible = LOOKUP_IMAGE in transformations;
-        mappings_row.visible = NAME_TO_ID in transformations || ID_TO_NAME in transformations;
-
-        allow_conversion (transformations);
+        allow_conversion ();
     }
 
-    private void allow_conversion (RequiredTransformations transforms) {
+    private void allow_conversion () {
+        RequiredTransformations transforms = check_format_compatibility ();
+
+        /* Change visibility of widgets if they are needed or not */
+        additional_group.visible = transforms != 0x0;
+        image_directory_row.visible = LOOKUP_IMAGE in transforms;
+        mappings_row.visible = NAME_TO_ID in transforms || ID_TO_NAME in transforms;
+
         if (source_row.selected_file == null || target_row.selected_file == null) {
+            convert_button.sensitive = false;
             return;
         }
 
@@ -174,34 +180,20 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
     [GtkCallback]
     private void on_convert_button_clicked () {
         message (@"$(check_format_compatibility ())");
+        var source_format = (Format) source_format_row.selected_item;
+        var target_format = (Format) target_format_row.selected_item;
 
-        var parser = new Yolo5OBBParser ();
-        var serializer = new Yolo5OBBSerializer ();
-
+        var pipeline = new ConversionPipeline (source_format, target_format) {
+            image_directory = image_directory_row.selected_file,
+            conversion_source = source_row.selected_file,
+            conversion_target = target_row.selected_file
+        };
+        
         try {
-            parser.init (source_row.selected_file);
-            // serializer.init (target_row.selected_file, null);
+            pipeline.configure (check_format_compatibility ());
+            pipeline.convert ();
         } catch (Error e) {
             critical (e.message);
-        }
-
-        while (parser.has_next ()) {
-            try {
-                Annotation? annotation = parser.get_next ();
-                if (annotation == null) {
-                    continue;
-                }
-                print(@"$annotation\n");
-                serializer.push ((owned) annotation);
-            } catch (Error e) {
-                critical (e.message);
-            }
-        }
-
-        try {
-            serializer.finish ();
-        } catch (Error e) {
-            warning (e.message);
         }
     }
 }

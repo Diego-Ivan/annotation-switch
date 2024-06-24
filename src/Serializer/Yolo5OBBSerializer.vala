@@ -41,13 +41,12 @@ public class AnnotationSwitch.Yolo5OBBSerializer : Object, AnnotationSwitch.Form
         }
 
         foreach (unowned Annotation annotation in annotations) {
-            string class_name = null;
             double x1 = annotation.x1, x2 = annotation.x2, 
                 x3 = annotation.x3, x4 = annotation.x4,
                 y1 = annotation.y1, y2 = annotation.y2,
                 y3 = annotation.y3, y4 = annotation.y4;
 
-            string format = @"$x1 $y1 $x2 $y2 $x3 $y3 $x4 $y4 $class_name 0\n";
+            string format = @"$x1 $y1 $x2 $y2 $x3 $y3 $x4 $y4 $(annotation.class_name) 0\n";
             output_stream.write (format.data);
         }
     }
