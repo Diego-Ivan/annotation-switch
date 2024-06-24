@@ -1,4 +1,4 @@
-annotation_switch_sources = [
+annotation_switch_sources = files (
   '../vapi/config.vapi',
   'main.vala',
   'application.vala',
@@ -15,23 +15,16 @@ annotation_switch_sources = [
   'Models/Format.vala',
   'Models/Annotation.vala',
 
-  # Parser
-  'Parser/FormatParser.vala',
-  'Parser/Yolo5OBBParser.vala',
-  'Parser/OIDv4Parser.vala',
-
-  # Serializer
-  'Serializer/FormatSerializer.vala',
-  'Serializer/Yolo5OBBSerializer.vala',
-  'Serializer/OIDv4Serializer.vala',
-
   # Transforms:
   'Transforms/Transform.vala',
   'Transforms/LookupImage.vala',
   'Transforms/Normalize.vala',
   'Transforms/Denormalize.vala',
   'Transforms/ClassMapping.vala',
-]
+)
+
+subdir ('Parser')
+subdir ('Serializer')
 
 cc = meson.get_compiler('c')
 m_dep = cc.find_library('m', required : false)
