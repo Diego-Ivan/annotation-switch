@@ -47,6 +47,7 @@ add_project_arguments(
 
 annotation_switch_deps = [
   dependency('gtk4'),
+  dependency('json-glib-1.0'),
   dependency('libadwaita-1', version: '>= 1.4'),
   m_dep,
 ]

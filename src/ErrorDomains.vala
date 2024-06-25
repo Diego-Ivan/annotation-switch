@@ -12,6 +12,7 @@ public errordomain AnnotationSwitch.FileError {
 
 public errordomain AnnotationSwitch.ParseError {
     WRONG_FORMAT,
+    NO_MAPPINGS,
 }
 
 public errordomain AnnotationSwitch.SerializeError {

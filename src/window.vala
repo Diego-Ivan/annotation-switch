@@ -142,7 +142,9 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
             transforms |= DENORMALIZE;
         }
 
-        transforms |= LOOKUP_IMAGE;
+        if (!source.contains_image_path) {
+            transforms |= LOOKUP_IMAGE;
+        }
     }
 
     private void check_source (Format source, Format target, ref RequiredTransformations transforms) {
@@ -152,11 +154,17 @@ public class AnnotationSwitch.Window : Adw.ApplicationWindow {
         if (!target.contains_image_path) {
             return;
         }
-        
-        transforms |= LOOKUP_IMAGE;
+
+        if (!source.contains_image_path) {
+            transforms |= LOOKUP_IMAGE;
+        }
     }
 
     private void check_mappings (Format source, Format target, ref RequiredTransformations transforms) {
+        if (source.contains_mapping) {
+            return;
+        }
+
         if (source.class_format == target.class_format) {
             return;
         }

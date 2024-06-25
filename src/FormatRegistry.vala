@@ -36,9 +36,9 @@ public class AnnotationSwitch.FormatRegistry : Object {
         };
 
         formats["coco"] = new Format ("COCO JSON", "coco") {
-            parser_type = typeof (OIDv4Parser),
+            parser_type = typeof (CocoParser),
             file_extension = "json", contains_image_path = true, named_after_image = false,
-            is_normalized = true, class_format = ID, source_type = FILE, contains_mapping = true,
+            is_normalized = false, class_format = ID, source_type = FILE, contains_mapping = true,
         };
     }
 
