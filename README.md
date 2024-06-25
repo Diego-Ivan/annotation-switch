@@ -1,3 +1,9 @@
-# annotation-switch
+# Annotation Switch (WIP)
 
-A description of this project.
+Convert computer vision annotation formats to others.
+
+Supported formats:
+
+* OIDv4
+* YOLO v5 Oriented Bounding Boxes
+* COCO JSON
